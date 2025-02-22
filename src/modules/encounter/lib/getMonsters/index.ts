@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import fuzzysort from "fuzzysort";
 import { buildMonsterFilters, GetMonsterFilters } from "../buildMonsterFilters";
 
 type GetMonstersParams = {
@@ -13,16 +14,19 @@ export const getMonsters = async ({
   pagination,
   filters,
 }: GetMonstersParams) => {
-  if (!filters) {
-    return await prisma.monster.findMany({
-      skip: pagination.offset,
-      take: pagination.limit,
-    });
-  }
-
-  return await prisma.monster.findMany({
+  const filteredMonsters = await prisma.monster.findMany({
     skip: pagination.offset,
     take: pagination.limit,
-    where: buildMonsterFilters(filters),
+    ...buildMonsterFilters(filters ?? {}),
   });
+
+  if (!filters?.name) {
+    return filteredMonsters;
+  }
+
+  const results = fuzzysort.go(filters.name, filteredMonsters, {
+    key: "name",
+  });
+
+  return results.map((result) => result.obj);
 };

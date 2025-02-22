@@ -4,7 +4,7 @@ export async function GET() {
   const res = await getMonsters({
     pagination: {
       offset: 0,
-      limit: 3,
+      limit: 100,
     },
   });
 

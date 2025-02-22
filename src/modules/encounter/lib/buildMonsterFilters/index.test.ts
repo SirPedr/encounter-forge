@@ -72,4 +72,14 @@ describe("buildMonsterFilters", () => {
 
     expect(result).toEqual({});
   });
+
+  it("should ignore keys that are not in the filter map", () => {
+    const filters: GetMonsterFilters = {
+      name: "dragon",
+    };
+
+    const result = buildMonsterFilters(filters);
+
+    expect(result).toEqual({});
+  });
 });

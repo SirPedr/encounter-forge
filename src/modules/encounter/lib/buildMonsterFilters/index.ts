@@ -9,6 +9,7 @@ export type GetMonsterFilters = {
   xpInLair?: RangeFilter;
   environments?: string[];
   type?: string[];
+  name?: string;
 };
 
 const FILTER_MAP: {
