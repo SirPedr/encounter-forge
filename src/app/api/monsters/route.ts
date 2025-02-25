@@ -1,5 +1,5 @@
-import { getMonsters } from "@/modules/encounter/lib/getMonsters";
-import { QUERY_SCHEMA } from "@/modules/encounter/lib/validateMonstersQuery";
+import { getMonsters } from "@/modules/monsters/lib/getMonsters";
+import { QUERY_SCHEMA } from "@/modules/monsters/lib/validateMonstersQuery";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
