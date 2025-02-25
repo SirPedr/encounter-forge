@@ -1,16 +1,6 @@
-type RangeFilter = {
-  min: number;
-  max: number;
-};
+import { GetMonstersParams } from "../validateMonstersQuery";
 
-export type GetMonsterFilters = {
-  challenge_rating?: RangeFilter;
-  xpGeneral?: RangeFilter;
-  xpInLair?: RangeFilter;
-  environments?: string[];
-  type?: string[];
-  name?: string;
-};
+export type GetMonsterFilters = GetMonstersParams["filters"];
 
 const FILTER_MAP: {
   [Key in keyof GetMonsterFilters]: (
@@ -51,6 +41,10 @@ export const buildMonsterFilters = (filters: GetMonsterFilters) => {
   const validEntries = Object.entries(filters).filter(([, value]) => {
     if (Array.isArray(value)) {
       return value.length > 0;
+    }
+
+    if (typeof value === "object" && value !== null) {
+      return Object.values(value).some((v) => v !== null);
     }
 
     return value;
