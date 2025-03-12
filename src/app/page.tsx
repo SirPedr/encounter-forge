@@ -1,17 +1,38 @@
-import { MonsterCard } from "@/modules/monsters/components/MonsterCard/MonsterCard";
+import { MonstersList } from "@/modules/monsters/components/MonstersList/MonstersList";
 import { getMonsters } from "@/modules/monsters/lib/getMonsters";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 
-export default async function Home() {
-  const monsters = await getMonsters({
-    pagination: { offset: 0, limit: 5 },
-    filters: {},
+const LIMIT_PER_PAGE = 10;
+
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page = "1" } = await searchParams;
+  const currentPage = parseInt(page, 10);
+  const offset = (currentPage - 1) * LIMIT_PER_PAGE;
+
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["monsters", { offset, limit: LIMIT_PER_PAGE }],
+    queryFn: () =>
+      getMonsters({
+        pagination: { offset, limit: LIMIT_PER_PAGE },
+        filters: {},
+      }),
   });
 
   return (
-    <section className="grid grid-cols-3 gap-2 p-2">
-      {monsters.map((monster) => (
-        <MonsterCard key={monster.id} monster={monster} />
-      ))}
-    </section>
+    <main className="p-2">
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <MonstersList />
+      </HydrationBoundary>
+    </main>
   );
 }
