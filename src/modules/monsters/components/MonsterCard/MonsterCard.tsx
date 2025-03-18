@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Monster } from "@prisma/client";
-import { useState } from "react";
+import React, { useState } from "react";
 
 type Props = {
   monster: Monster;
@@ -43,7 +43,10 @@ export const MonsterCard = ({ monster, onAmountChange }: Props) => {
           Environments: {monster.environments.join(", ")}
         </CardDescription>
         <CardDescription>
-          XP: {monster.xpGeneral} | In Lair: {monster.xpInLair}
+          XP: {monster.xpGeneral}{" "}
+          {monster.xpInLair && (
+            <React.Fragment>| In Lair: {monster.xpInLair}</React.Fragment>
+          )}
         </CardDescription>
       </CardContent>
 
