@@ -17,10 +17,10 @@ export const MonstersList = () => {
   const offset = (page - 1) * 10;
 
   const { data: monsters } = useQuery<Monster[]>({
-    queryKey: ["monsters", { offset, limit: 10 }],
+    queryKey: ["monsters", { offset }],
     placeholderData: keepPreviousData,
     queryFn: () =>
-      fetch(`/api/monsters?offset=${offset}&limit=10`)
+      fetch(`/api/monsters?offset=${offset}&limit=12`)
         .then((res) => res.json())
         .then((a) => a.monsters),
   });

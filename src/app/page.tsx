@@ -6,7 +6,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 
-const LIMIT_PER_PAGE = 10;
+const LIMIT_PER_PAGE = 12;
 
 export default async function Home({
   searchParams,
@@ -20,7 +20,7 @@ export default async function Home({
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["monsters", { offset, limit: LIMIT_PER_PAGE }],
+    queryKey: ["monsters", { offset }],
     queryFn: () =>
       getMonsters({
         pagination: { offset, limit: LIMIT_PER_PAGE },
