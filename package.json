@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@prisma/client": "6.3.1",
+    "@radix-ui/react-dialog": "^1.1.6",
     "@radix-ui/react-slot": "^1.1.2",
     "@tanstack/react-query": "^5.67.3",
     "class-variance-authority": "^0.7.1",
@@ -18,11 +19,13 @@
     "fuzzysort": "^3.1.0",
     "lucide-react": "^0.477.0",
     "next": "15.1.7",
+    "next-router-mock": "^0.9.13",
     "prisma": "^6.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",
+    "vaul": "^1.1.2",
     "zod": "^3.24.2",
     "zustand": "^5.0.3"
   },
@@ -46,6 +49,6 @@
     "tailwindcss": "^4.0.0",
     "typescript": "^5",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.0.5"
+    "vitest": "^3.0.9"
   }
 }

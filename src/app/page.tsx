@@ -1,4 +1,4 @@
-import { MonstersList } from "@/modules/monsters/components/MonstersList/MonstersList";
+import { EncounterBuildPage } from "@/modules/encounter/pages/EncounterBuildPage";
 import { getMonsters } from "@/modules/monsters/lib/getMonsters";
 import {
   dehydrate,
@@ -6,7 +6,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 
-const LIMIT_PER_PAGE = 12;
+const LIMIT_PER_PAGE = 21;
 
 export default async function Home({
   searchParams,
@@ -29,10 +29,10 @@ export default async function Home({
   });
 
   return (
-    <main className="p-2">
+    <div className="p-5">
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <MonstersList />
+        <EncounterBuildPage />
       </HydrationBoundary>
-    </main>
+    </div>
   );
 }

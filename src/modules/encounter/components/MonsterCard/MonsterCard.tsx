@@ -10,24 +10,22 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Monster } from "@prisma/client";
-import React, { useState } from "react";
+import React from "react";
+import { EncounterMonster } from "../../types";
 
 type Props = {
   monster: Monster;
-  onAmountChange?: (monsterID: number, amount: number) => void;
+  amount: number;
+  onAmountChange?: (monster: EncounterMonster) => void;
 };
 
-export const MonsterCard = ({ monster, onAmountChange }: Props) => {
-  const [amount, setAmount] = useState(0);
-
+export const MonsterCard = ({ monster, amount, onAmountChange }: Props) => {
   const onIncreaseAmount = () => {
-    setAmount((amount) => amount + 1);
-    onAmountChange?.(monster.id, amount + 1);
+    onAmountChange?.({ ...monster, amount: amount + 1 });
   };
 
   const onDecreaseAmount = () => {
-    setAmount((amount) => amount - 1);
-    onAmountChange?.(monster.id, amount - 1);
+    onAmountChange?.({ ...monster, amount: amount - 1 });
   };
 
   return (

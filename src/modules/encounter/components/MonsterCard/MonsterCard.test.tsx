@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { createMonsterFixture } from "../../fixtures/monster.fixture";
+import { createMonsterFixture } from "../../../monsters/fixtures/monster.fixture";
 import { MonsterCard } from "./MonsterCard";
 
 describe("MonsterCard", () => {
@@ -12,7 +12,7 @@ describe("MonsterCard", () => {
       xpInLair: 30000,
     });
 
-    render(<MonsterCard monster={fakeMonster} />);
+    render(<MonsterCard monster={fakeMonster} amount={0} />);
 
     expect(screen.getByText(fakeMonster.name)).toBeInTheDocument();
     expect(screen.getByText("CR 1")).toBeInTheDocument();
@@ -26,13 +26,9 @@ describe("MonsterCard", () => {
     expect(screen.getByRole("button", { name: "Add" })).toBeInTheDocument();
   });
 
-  it("should show amount controls when user clicks on Add button", async () => {
+  it("should show amount controls when amount is bigger than 0", async () => {
     const fakeMonster = createMonsterFixture({ amount: 1 });
-    render(<MonsterCard monster={fakeMonster} />);
-
-    const addButton = screen.getByRole("button", { name: "Add" });
-
-    await userEvent.click(addButton);
+    render(<MonsterCard monster={fakeMonster} amount={1} />);
 
     expect(
       screen.getByRole("button", {
@@ -55,7 +51,11 @@ describe("MonsterCard", () => {
       const fakeMonster = createMonsterFixture({ amount: 1 });
 
       render(
-        <MonsterCard monster={fakeMonster} onAmountChange={onAmountChangeSpy} />
+        <MonsterCard
+          monster={fakeMonster}
+          amount={0}
+          onAmountChange={onAmountChangeSpy}
+        />
       );
 
       const addButton = screen.getByRole("button", { name: "Add" });
@@ -63,7 +63,10 @@ describe("MonsterCard", () => {
       await userEvent.click(addButton);
 
       expect(onAmountChangeSpy).toHaveBeenCalledTimes(1);
-      expect(onAmountChangeSpy).toHaveBeenCalledWith(fakeMonster.id, 1);
+      expect(onAmountChangeSpy).toHaveBeenCalledWith({
+        ...fakeMonster,
+        amount: 1,
+      });
     });
 
     it("should call onAmountChange when user clicks on increase amount button", async () => {
@@ -71,12 +74,12 @@ describe("MonsterCard", () => {
       const fakeMonster = createMonsterFixture({ amount: 1 });
 
       render(
-        <MonsterCard monster={fakeMonster} onAmountChange={onAmountChangeSpy} />
+        <MonsterCard
+          monster={fakeMonster}
+          amount={1}
+          onAmountChange={onAmountChangeSpy}
+        />
       );
-
-      const addButton = screen.getByRole("button", { name: "Add" });
-
-      await userEvent.click(addButton);
 
       const increaseButton = screen.getByRole("button", {
         name: `Add 1 ${fakeMonster.name} from encounter`,
@@ -84,8 +87,11 @@ describe("MonsterCard", () => {
 
       await userEvent.click(increaseButton);
 
-      expect(onAmountChangeSpy).toHaveBeenCalledTimes(2);
-      expect(onAmountChangeSpy).toHaveBeenLastCalledWith(fakeMonster.id, 2);
+      expect(onAmountChangeSpy).toHaveBeenCalledTimes(1);
+      expect(onAmountChangeSpy).toHaveBeenLastCalledWith({
+        ...fakeMonster,
+        amount: 2,
+      });
     });
   });
 
@@ -94,12 +100,12 @@ describe("MonsterCard", () => {
     const fakeMonster = createMonsterFixture({ amount: 1 });
 
     render(
-      <MonsterCard monster={fakeMonster} onAmountChange={onAmountChangeSpy} />
+      <MonsterCard
+        monster={fakeMonster}
+        amount={1}
+        onAmountChange={onAmountChangeSpy}
+      />
     );
-
-    const addButton = screen.getByRole("button", { name: "Add" });
-
-    await userEvent.click(addButton);
 
     const decreaseButton = screen.getByRole("button", {
       name: `Remove 1 ${fakeMonster.name} from encounter`,
@@ -107,9 +113,10 @@ describe("MonsterCard", () => {
 
     await userEvent.click(decreaseButton);
 
-    expect(onAmountChangeSpy).toHaveBeenCalledTimes(2);
-    expect(onAmountChangeSpy).toHaveBeenLastCalledWith(fakeMonster.id, 0);
-
-    expect(screen.getByRole("button", { name: "Add" })).toBeInTheDocument();
+    expect(onAmountChangeSpy).toHaveBeenCalledTimes(1);
+    expect(onAmountChangeSpy).toHaveBeenLastCalledWith({
+      ...fakeMonster,
+      amount: 0,
+    });
   });
 });

@@ -1,13 +1,22 @@
-import { isServer, QueryClient } from "@tanstack/react-query";
+import { isServer, QueryClient, QueryKey } from "@tanstack/react-query";
 
-const makeQueryClient = () =>
-  new QueryClient({
+export const makeQueryClient = (initialData?: Array<[QueryKey, unknown]>) => {
+  const client = new QueryClient({
     defaultOptions: {
       queries: {
         staleTime: 60_000,
       },
     },
   });
+
+  if (initialData) {
+    initialData.forEach(([queryKey, queryData]) => {
+      client.setQueryData(queryKey, queryData);
+    });
+  }
+
+  return client;
+};
 
 let browserQueryClient: QueryClient | undefined = undefined;
 
