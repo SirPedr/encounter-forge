@@ -21,14 +21,15 @@ export const EncounterBuildPage = () => {
 
   return (
     <main>
-      <Button
-        onClick={() => {
-          setIsDrawerOpen(true);
-        }}
-      >
-        Encounter details
-      </Button>
-
+      <section className="bg-(--background) mb-4 sticky top-0 p-4 -m-4">
+        <Button
+          onClick={() => {
+            setIsDrawerOpen(true);
+          }}
+        >
+          Encounter details
+        </Button>
+      </section>
       <EncounterDetails
         open={isDrawerOpen}
         onOpenChange={(open) => setIsDrawerOpen(open)}

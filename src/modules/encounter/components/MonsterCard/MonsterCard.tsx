@@ -29,7 +29,7 @@ export const MonsterCard = ({ monster, amount, onAmountChange }: Props) => {
   };
 
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader className="flex flex-row">
         <CardTitle>{monster.name}</CardTitle>
         <CardDescription>CR {monster.challenge_rating}</CardDescription>
@@ -48,7 +48,7 @@ export const MonsterCard = ({ monster, amount, onAmountChange }: Props) => {
         </CardDescription>
       </CardContent>
 
-      <CardFooter className="justify-center">
+      <CardFooter className="justify-center mt-auto">
         {amount === 0 ? (
           <Button onClick={onIncreaseAmount} className="w-full">
             Add
