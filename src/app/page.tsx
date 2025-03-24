@@ -1,4 +1,5 @@
 import { EncounterBuildPage } from "@/modules/encounter/pages/EncounterBuildPage";
+import { MonsterListingPage } from "@/modules/encounter/pages/MonsterListingPage";
 import { getMonsters } from "@/modules/monsters/lib/getMonsters";
 import {
   dehydrate,

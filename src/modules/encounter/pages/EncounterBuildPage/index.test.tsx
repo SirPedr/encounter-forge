@@ -1,12 +1,10 @@
-import { createMonsterFixture } from "@/modules/monsters/fixtures/monster.fixture";
-import { makeQueryClient } from "@/providers/reactQuery";
-import { EncounterForgeStoreProvider } from "@/providers/zustand";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { render, screen, within } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { EncounterBuildPage } from ".";
-import { Monster } from "@prisma/client";
+import { EncounterForgeStoreProvider } from "@/providers/zustand";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { makeQueryClient } from "@/providers/reactQuery";
+import userEvent from "@testing-library/user-event";
 
 vi.mock("next/navigation", () => ({
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -14,134 +12,40 @@ vi.mock("next/navigation", () => ({
   useSearchParams: vi.fn(() => new URLSearchParams({ page: "1" })),
 }));
 
-const renderEncounterBuildPage = ({
-  preloadedMonsters,
-}: {
-  preloadedMonsters: Monster[];
-}) =>
+const renderEncounterBuildPage = () =>
   render(
-    <QueryClientProvider
-      client={makeQueryClient([
-        [["monsters", { offset: 0 }], preloadedMonsters],
-      ])}
-    >
-      <EncounterForgeStoreProvider>
+    <EncounterForgeStoreProvider>
+      <QueryClientProvider
+        client={makeQueryClient([[["monsters", { offset: 0 }], []]])}
+      >
         <EncounterBuildPage />
-      </EncounterForgeStoreProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </EncounterForgeStoreProvider>
   );
 
 describe("EncounterBuildPage", () => {
-  it("should render with all basic elements", () => {
-    const fakeMonster = createMonsterFixture({ amount: 1 });
+  it("should render with monsters and party tabs ", () => {
+    renderEncounterBuildPage();
 
-    renderEncounterBuildPage({ preloadedMonsters: [fakeMonster] });
+    expect(screen.getByRole("tab", { name: "Monsters" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Party" })).toBeInTheDocument();
+  });
 
-    const monsterList = screen.getByRole("list", { name: /monster list/i });
-    const renderedItems = within(monsterList).getAllByRole("listitem");
-
-    expect(monsterList).toBeInTheDocument();
-    expect(renderedItems).toHaveLength(1);
-
-    expect(screen.getByText(fakeMonster.name)).toBeInTheDocument();
+  it("should render monsters tab by default", () => {
+    renderEncounterBuildPage();
 
     expect(
-      screen.getByRole("button", { name: /encounter details/i })
+      screen.getByRole("heading", { name: "Monsters" })
     ).toBeInTheDocument();
   });
 
-  it("should update the encounter summary drawer when monsters are added", async () => {
-    const fakeMonster = createMonsterFixture({ amount: 1 });
+  it("should render party tab when clicked", async () => {
+    renderEncounterBuildPage();
 
-    renderEncounterBuildPage({ preloadedMonsters: [fakeMonster] });
+    const partyPageTab = screen.getByRole("tab", { name: "Party" });
 
-    const addMonsterButton = screen.getByRole("button", {
-      name: /add/i,
-    });
-    const encounterDetailsButton = screen.getByRole("button", {
-      name: /encounter details/i,
-    });
+    await userEvent.click(partyPageTab);
 
-    expect(addMonsterButton).toBeInTheDocument();
-    expect(encounterDetailsButton).toBeInTheDocument();
-
-    await userEvent.click(addMonsterButton);
-    await userEvent.click(encounterDetailsButton);
-
-    const encounterDetailsDrawer = screen.getByRole("dialog", {
-      name: /encounter details/i,
-    });
-
-    expect(encounterDetailsDrawer).toBeInTheDocument();
-
-    expect(
-      within(encounterDetailsDrawer).getByText(fakeMonster.name)
-    ).toBeInTheDocument();
-  });
-
-  it("should update the encounter summary drawer when monsters are added", async () => {
-    const fakeMonster = createMonsterFixture({ amount: 1 });
-
-    renderEncounterBuildPage({ preloadedMonsters: [fakeMonster] });
-
-    const addMonsterButton = screen.getByRole("button", {
-      name: /add/i,
-    });
-    const encounterDetailsButton = screen.getByRole("button", {
-      name: /encounter details/i,
-    });
-
-    expect(addMonsterButton).toBeInTheDocument();
-    expect(encounterDetailsButton).toBeInTheDocument();
-
-    await userEvent.click(addMonsterButton);
-
-    const removeMonsterButton = screen.getByRole("button", { name: /remove/i });
-
-    await userEvent.click(removeMonsterButton);
-    await userEvent.click(encounterDetailsButton);
-
-    const encounterDetailsDrawer = screen.getByRole("dialog", {
-      name: /encounter details/i,
-    });
-
-    expect(encounterDetailsDrawer).toBeInTheDocument();
-
-    expect(
-      within(encounterDetailsDrawer).queryByText(fakeMonster.name)
-    ).not.toBeInTheDocument();
-  });
-
-  it("should update monster list when amount is changed inside the encounter details drawer", async () => {
-    const fakeMonster = createMonsterFixture({ amount: 1 });
-    const user = userEvent.setup();
-
-    renderEncounterBuildPage({ preloadedMonsters: [fakeMonster] });
-
-    const addMonsterButton = screen.getByRole("button", {
-      name: /add/i,
-    });
-    const encounterDetailsButton = screen.getByRole("button", {
-      name: /encounter details/i,
-    });
-
-    expect(addMonsterButton).toBeInTheDocument();
-    expect(encounterDetailsButton).toBeInTheDocument();
-
-    await user.click(addMonsterButton);
-    await user.click(encounterDetailsButton);
-
-    const encounterDetailsDrawer = screen.getByRole("dialog", {
-      name: /encounter details/i,
-    });
-
-    const plusButton = within(encounterDetailsDrawer).getByRole("button", {
-      name: /add/i,
-    });
-
-    await user.click(plusButton);
-    await user.keyboard("{Escape}");
-
-    expect(screen.getByText("2")).toBeInTheDocument();
+    expect(screen.getByText("No party defined")).toBeInTheDocument();
   });
 });

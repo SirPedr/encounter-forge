@@ -1,4 +1,5 @@
 export type PartyMember = {
+  id: string;
   name: string;
   level: number;
 };

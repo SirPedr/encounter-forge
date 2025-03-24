@@ -1,43 +1,22 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { MonstersList } from "@/modules/encounter/components/MonstersList/MonstersList";
-import { useEncounterForgeStore } from "@/providers/zustand";
-import { useState } from "react";
-import { EncounterDetails } from "../../components/EncounterDetails";
-import { EncounterMonster } from "../../types";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { MonsterListingPage } from "../MonsterListingPage";
+import { PartyCreationPage } from "../PartyCreationPage";
 
-export const EncounterBuildPage = () => {
-  const monsters = useEncounterForgeStore((store) => store.monsters);
-  const updateMonsterInEncounter = useEncounterForgeStore(
-    (store) => store.updateMonsterInEncounter
-  );
+export const EncounterBuildPage = () => (
+  <Tabs defaultValue="monsters">
+    <TabsList className="w-full">
+      <TabsTrigger value="party">Party</TabsTrigger>
+      <TabsTrigger value="monsters">Monsters</TabsTrigger>
+    </TabsList>
 
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    <TabsContent value="monsters">
+      <MonsterListingPage />
+    </TabsContent>
 
-  const onMonsterUpdate = (monster: EncounterMonster) => {
-    updateMonsterInEncounter(monster);
-  };
-
-  return (
-    <main>
-      <section className="bg-(--background) mb-4 sticky top-0 p-4 -m-4">
-        <Button
-          onClick={() => {
-            setIsDrawerOpen(true);
-          }}
-        >
-          Encounter details
-        </Button>
-      </section>
-      <EncounterDetails
-        open={isDrawerOpen}
-        onOpenChange={(open) => setIsDrawerOpen(open)}
-        encounter={{ monsters }}
-        onMonsterAmountUpdate={onMonsterUpdate}
-      />
-
-      <MonstersList onMonsterAdd={onMonsterUpdate} />
-    </main>
-  );
-};
+    <TabsContent value="party">
+      <PartyCreationPage />
+    </TabsContent>
+  </Tabs>
+);

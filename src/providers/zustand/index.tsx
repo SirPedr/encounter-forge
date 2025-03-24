@@ -1,5 +1,7 @@
-import { EncounterSlice } from "@/modules/encounter/slice";
-import { createEncounterForgeStore } from "@/zustand/store";
+import {
+  createEncounterForgeStore,
+  EncounterForgeStore,
+} from "@/zustand/store";
 import { createContext, useContext, useRef } from "react";
 import { useStore } from "zustand";
 
@@ -11,23 +13,25 @@ const EncounterForgeStoreContext = createContext<
 
 export const EncounterForgeStoreProvider = ({
   children,
+  initialStore,
 }: {
   children: React.ReactNode;
+  initialStore?: Partial<EncounterForgeStore>;
 }) => {
   const storeRef = useRef<EncounterForgeStorApi | null>(null);
   if (storeRef.current === null) {
-    storeRef.current = createEncounterForgeStore();
+    storeRef.current = createEncounterForgeStore(initialStore);
   }
 
   return (
-    <EncounterForgeStoreContext.Provider value={storeRef.current}>
+    <EncounterForgeStoreContext value={storeRef.current}>
       {children}
-    </EncounterForgeStoreContext.Provider>
+    </EncounterForgeStoreContext>
   );
 };
 
 export const useEncounterForgeStore = <T,>(
-  selector: (store: EncounterSlice) => T
+  selector: (store: EncounterForgeStore) => T
 ) => {
   const store = useContext(EncounterForgeStoreContext);
 
