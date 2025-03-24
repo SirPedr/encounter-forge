@@ -1,15 +1,42 @@
 import { createMonsterFixture } from "@/modules/monsters/fixtures/monster.fixture";
 import { render, screen, within } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { EncounterDetails } from ".";
 
 describe("EncounterDetails", () => {
+  it("should render empty state when there are no monsters in encounter", () => {
+    render(
+      <EncounterDetails
+        open
+        onMonsterAmountUpdate={vi.fn()}
+        encounter={{ monsters: [] }}
+      />
+    );
+
+    expect(
+      screen.getByRole("heading", { name: /encounter details/i })
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText("An Empty Battlefield... For Now")
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "No monsters lurk in the shadows—yet. Add some creatures to build your perfect encounter and give your players a challenge they'll never forget!"
+      )
+    ).toBeInTheDocument();
+  });
+
   it("should render monsters in encounter with all their information", () => {
     const fakeMonster = createMonsterFixture({ amount: 1 });
     const monstersInEncounter = [fakeMonster];
 
     render(
-      <EncounterDetails open encounter={{ monsters: monstersInEncounter }} />
+      <EncounterDetails
+        open
+        onMonsterAmountUpdate={vi.fn()}
+        encounter={{ monsters: monstersInEncounter }}
+      />
     );
 
     expect(

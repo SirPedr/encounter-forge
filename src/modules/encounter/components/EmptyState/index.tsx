@@ -7,10 +7,10 @@ type Props = {
 };
 
 export const EmptyState = ({ title, description }: Props) => (
-  <section className="flex flex-col items-center">
+  <section className="flex flex-col items-center text-center">
     <EmptyStateIllustration />
 
     <h1 className="text-3xl font-bold">{title}</h1>
-    <p className="mt-2 mb-4">{description}</p>
+    <p className="mt-2">{description}</p>
   </section>
 );

@@ -12,12 +12,12 @@ export const PartyCreationPage = () => {
     return (
       <React.Fragment>
         <EmptyState
-          title="No part defined"
-          description="Start creating your encounter by adding one party member"
+          title="Who Dares to Face Them?"
+          description="No adventurers have stepped forward yet. Add a party to see how they measure up against the challenge!"
         />
         <Button
           onClick={addPartyMember}
-          className="w-full md:w-1/2 md:max-w-[430px] block mx-auto my-0"
+          className="w-full md:w-1/2 md:max-w-[430px] block mx-auto mt-4"
         >
           Add party member
         </Button>

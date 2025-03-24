@@ -46,6 +46,8 @@ describe("EncounterBuildPage", () => {
 
     await userEvent.click(partyPageTab);
 
-    expect(screen.getByText("No party defined")).toBeInTheDocument();
+    expect(
+      screen.getByText(/no adventurers have stepped forward yet/i)
+    ).toBeInTheDocument();
   });
 });

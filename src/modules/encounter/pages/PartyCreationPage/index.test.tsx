@@ -13,10 +13,10 @@ describe("PartyCreationPage", () => {
       </EncounterForgeStoreProvider>
     );
 
-    expect(screen.getByText("No party defined")).toBeInTheDocument();
+    expect(screen.getByText("Who Dares to Face Them?")).toBeInTheDocument();
     expect(
       screen.getByText(
-        "Start creating your encounter by adding one party member"
+        "No adventurers have stepped forward yet. Add a party to see how they measure up against the challenge!"
       )
     ).toBeInTheDocument();
 
@@ -95,7 +95,9 @@ describe("PartyCreationPage", () => {
       screen.queryByRole("textbox", { name: /name/i })
     ).not.toBeInTheDocument();
 
-    expect(screen.getByText("No party defined")).toBeInTheDocument();
+    expect(
+      screen.getByText(/no adventurers have stepped forward yet/i)
+    ).toBeInTheDocument();
   });
 
   it("should allow to edit party members", async () => {
