@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { useParty } from "@/modules/party/hooks/useParty";
 import { PartyMember } from "../../components/PartyMember";
+import { EmptyState } from "../../components/EmptyState";
+import React from "react";
 
 export const PartyCreationPage = () => {
   const { party, addPartyMember, removePartyMember, updatePartyMember } =
@@ -8,11 +10,18 @@ export const PartyCreationPage = () => {
 
   if (party.length === 0) {
     return (
-      <>
-        <p>No party defined</p>
-        <p>Start creating your encounter by adding one party member</p>
-        <Button onClick={addPartyMember}>Add party member</Button>
-      </>
+      <React.Fragment>
+        <EmptyState
+          title="No part defined"
+          description="Start creating your encounter by adding one party member"
+        />
+        <Button
+          onClick={addPartyMember}
+          className="w-full md:w-1/2 md:max-w-[430px] block mx-auto my-0"
+        >
+          Add party member
+        </Button>
+      </React.Fragment>
     );
   }
 
