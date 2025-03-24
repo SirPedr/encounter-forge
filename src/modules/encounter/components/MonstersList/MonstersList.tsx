@@ -28,7 +28,10 @@ export const MonstersList = ({ onMonsterAdd }: Props) => {
 
   return (
     <section>
-      <ol className="grid grid-cols-3 gap-4" aria-label="monster list">
+      <ol
+        className="grid grid-cols-1 md:grid-cols-3 gap-4"
+        aria-label="monster list"
+      >
         {monsters?.map((monster) => {
           const amount =
             monstersInEncounter.find((m) => m.id === monster.id)?.amount ?? 0;
