@@ -1,6 +1,6 @@
 import { createPartyFixture } from "@/modules/party/fixtures/party.fixture";
 import { EncounterForgeStoreProvider } from "@/providers/zustand";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { PartyCreationPage } from ".";
 import userEvent from "@testing-library/user-event";
@@ -37,8 +37,11 @@ describe("PartyCreationPage", () => {
     const levelSelects = screen.getAllByRole("combobox", { name: /level/i });
 
     expect(levelSelects).toHaveLength(fakeParty.length);
+
     levelSelects.forEach((select, index) => {
-      expect(select).toHaveValue(fakeParty[index].level.toString());
+      expect(
+        within(select).getByText(fakeParty[index].level)
+      ).toBeInTheDocument();
     });
 
     const nameInputs = screen.getAllByRole("textbox", { name: /name/i });
@@ -54,6 +57,19 @@ describe("PartyCreationPage", () => {
         screen.getByRole("button", { name: `Remove ${partyMember.name}` })
       ).toBeInTheDocument();
     });
+  });
+
+  it("should keep add button even when party members are present", () => {
+    const fakeParty = createPartyFixture({ amountOfPlayers: 3, level: 1 });
+
+    render(
+      <EncounterForgeStoreProvider initialStore={{ party: fakeParty }}>
+        <PartyCreationPage />
+      </EncounterForgeStoreProvider>
+    );
+
+    expect(screen.getByRole("button", { name: /add party member/i }))
+      .toBeInTheDocument;
   });
 
   it("should allow to add party members", async () => {
@@ -119,7 +135,12 @@ describe("PartyCreationPage", () => {
 
     const levelSelect = screen.getByRole("combobox", { name: /level/i });
 
-    await user.selectOptions(levelSelect, "5");
-    expect(levelSelect).toHaveValue("5");
+    await user.click(levelSelect);
+
+    const levelOptions = screen.getByRole("option", { name: "5" });
+
+    await user.click(levelOptions);
+
+    expect(within(levelSelect).getByText("5")).toBeInTheDocument();
   });
 });

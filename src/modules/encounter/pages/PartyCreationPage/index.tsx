@@ -3,6 +3,13 @@ import { useParty } from "@/modules/party/hooks/useParty";
 import { PartyMember } from "../../components/PartyMember";
 import { EmptyState } from "../../components/EmptyState";
 import React from "react";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export const PartyCreationPage = () => {
   const { party, addPartyMember, removePartyMember, updatePartyMember } =
@@ -26,16 +33,33 @@ export const PartyCreationPage = () => {
   }
 
   return (
-    <ul>
-      {party.map((partyMember) => (
-        <li key={partyMember.id}>
-          <PartyMember
-            {...partyMember}
-            onRemove={removePartyMember}
-            onUpdate={updatePartyMember}
-          />
-        </li>
-      ))}
-    </ul>
+    <div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Level</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {party.map((partyMember) => (
+            <TableRow key={partyMember.id}>
+              <PartyMember
+                {...partyMember}
+                onRemove={removePartyMember}
+                onUpdate={updatePartyMember}
+              />
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <Button
+        onClick={addPartyMember}
+        className="w-full md:w-auto block ml-auto mt-4"
+      >
+        Add party member
+      </Button>
+    </div>
   );
 };
