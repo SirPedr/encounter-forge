@@ -9,9 +9,9 @@ describe("balanceEncounter", () => {
     describe("For levels 1-4", () => {
       it.each([
         [ENCOUNTER_DIFFICULTY.EASY, 1],
-        [ENCOUNTER_DIFFICULTY.MEDIUM, 2],
-        [ENCOUNTER_DIFFICULTY.HARD, 3],
-        [ENCOUNTER_DIFFICULTY.DEADLY, 4],
+        [ENCOUNTER_DIFFICULTY.MEDIUM, 1.8],
+        [ENCOUNTER_DIFFICULTY.HARD, 2.5],
+        [ENCOUNTER_DIFFICULTY.DEADLY, 3],
       ])(
         "should evaluate encounter as %s",
         (expectedDifficulty, challenge_rating) => {

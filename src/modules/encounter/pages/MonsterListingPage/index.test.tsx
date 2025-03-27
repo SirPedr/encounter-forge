@@ -7,6 +7,7 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { MonsterListingPage } from ".";
+import { createPartyFixture } from "@/modules/party/fixtures/party.fixture";
 
 vi.mock("next/navigation", () => ({
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -25,7 +26,11 @@ const renderEncounterBuildPage = ({
         [["monsters", { offset: 0 }], preloadedMonsters],
       ])}
     >
-      <EncounterForgeStoreProvider>
+      <EncounterForgeStoreProvider
+        initialStore={{
+          party: createPartyFixture({ amountOfPlayers: 1, level: 20 }),
+        }}
+      >
         <MonsterListingPage />
       </EncounterForgeStoreProvider>
     </QueryClientProvider>
@@ -143,5 +148,29 @@ describe("MonsterListingPage", () => {
     await user.keyboard("{Escape}");
 
     expect(screen.getByText("2")).toBeInTheDocument();
+  });
+
+  it("should show encounter difficulty tag when monsters are added", async () => {
+    const fakeMonster = createMonsterFixture({
+      amount: 1,
+      challenge_rating: 1 / 8,
+    });
+
+    renderEncounterBuildPage({ preloadedMonsters: [fakeMonster] });
+
+    const addMonsterButton = screen.getByRole("button", {
+      name: /add/i,
+    });
+    const encounterDetailsButton = screen.getByRole("button", {
+      name: /encounter details/i,
+    });
+
+    const buttonContainer = within(encounterDetailsButton);
+
+    expect(buttonContainer.queryByText(/easy/i)).not.toBeInTheDocument();
+
+    await userEvent.click(addMonsterButton);
+
+    expect(buttonContainer.getByText(/easy/i)).toBeInTheDocument();
   });
 });

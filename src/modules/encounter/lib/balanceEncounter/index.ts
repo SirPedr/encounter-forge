@@ -1,11 +1,11 @@
 import { Party } from "@/modules/party/types";
 import { Monster } from "@prisma/client";
-import { ENCOUNTER_DIFFICULTY } from "../../types";
+import { ENCOUNTER_DIFFICULTY, EncounterMonster } from "../../types";
 import { getDeadlyThreshold } from "../getDeadlyThreshold";
 
 type BalanceParams = {
   party: Party;
-  monsters: Array<Monster & { amount: number }>;
+  monsters: Array<EncounterMonster>;
 };
 
 const MAX_POSSIBLE_PARTY_LEVEL = 20;
@@ -41,7 +41,7 @@ export const balanceEncounter = ({ monsters, party }: BalanceParams) => {
   const difficultyThresholds = getDifficultyThresholds(deadlyThreshold);
 
   for (const { threshold, difficulty } of difficultyThresholds) {
-    if (totalChallengeRating > threshold) {
+    if (totalChallengeRating >= threshold) {
       return difficulty;
     }
   }

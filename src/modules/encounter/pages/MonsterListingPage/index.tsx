@@ -6,12 +6,15 @@ import { useEncounterForgeStore } from "@/providers/zustand";
 import { useState } from "react";
 import { EncounterDetails } from "../../components/EncounterDetails";
 import { EncounterMonster } from "../../types";
+import { useEncounterDifficulty } from "../../hooks/useEncounterDifficulty";
+import { Badge } from "@/components/ui/badge";
 
 export const MonsterListingPage = () => {
   const monsters = useEncounterForgeStore((store) => store.monsters);
   const updateMonsterInEncounter = useEncounterForgeStore(
     (store) => store.updateMonsterInEncounter
   );
+  const difficulty = useEncounterDifficulty();
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -28,7 +31,12 @@ export const MonsterListingPage = () => {
             setIsDrawerOpen(true);
           }}
         >
-          Encounter details
+          Encounter details{" "}
+          {difficulty ? (
+            <Badge variant="secondary">{difficulty.toUpperCase()}</Badge>
+          ) : (
+            ""
+          )}
         </Button>
       </section>
       <EncounterDetails
