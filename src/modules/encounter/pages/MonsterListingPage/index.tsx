@@ -24,8 +24,7 @@ export const MonsterListingPage = () => {
 
   return (
     <main>
-      <h1>Monsters</h1>
-      <section className="bg-(--background) mb-4 sticky top-0 p-4 -m-4">
+      <section className="bg-(--background) mb-4 sticky top-0 p-4 m-0 -ml-4">
         <Button
           onClick={() => {
             setIsDrawerOpen(true);
@@ -39,10 +38,13 @@ export const MonsterListingPage = () => {
           )}
         </Button>
       </section>
+
+      <h1 className="mb-5 text-xl font-bold">Monsters</h1>
+
       <EncounterDetails
         open={isDrawerOpen}
         onOpenChange={(open) => setIsDrawerOpen(open)}
-        encounter={{ monsters }}
+        encounter={{ monsters, difficulty }}
         onMonsterAmountUpdate={onMonsterUpdate}
       />
 

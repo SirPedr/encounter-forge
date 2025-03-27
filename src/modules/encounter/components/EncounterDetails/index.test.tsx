@@ -2,6 +2,7 @@ import { createMonsterFixture } from "@/modules/monsters/fixtures/monster.fixtur
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { EncounterDetails } from ".";
+import { ENCOUNTER_DIFFICULTY } from "../../types";
 
 describe("EncounterDetails", () => {
   it("should render empty state when there are no monsters in encounter", () => {
@@ -9,7 +10,7 @@ describe("EncounterDetails", () => {
       <EncounterDetails
         open
         onMonsterAmountUpdate={vi.fn()}
-        encounter={{ monsters: [] }}
+        encounter={{ monsters: [], difficulty: ENCOUNTER_DIFFICULTY.MEDIUM }}
       />
     );
 
@@ -35,7 +36,10 @@ describe("EncounterDetails", () => {
       <EncounterDetails
         open
         onMonsterAmountUpdate={vi.fn()}
-        encounter={{ monsters: monstersInEncounter }}
+        encounter={{
+          monsters: monstersInEncounter,
+          difficulty: ENCOUNTER_DIFFICULTY.MEDIUM,
+        }}
       />
     );
 
@@ -73,5 +77,25 @@ describe("EncounterDetails", () => {
         name: `Remove 1 ${fakeMonster.name} from encounter`,
       })
     ).toBeInTheDocument();
+  });
+
+  it("should show encounter difficulty explanation", () => {
+    const fakeMonster = createMonsterFixture({ amount: 1 });
+    const monstersInEncounter = [fakeMonster];
+
+    render(
+      <EncounterDetails
+        open
+        onMonsterAmountUpdate={vi.fn()}
+        encounter={{
+          monsters: monstersInEncounter,
+          difficulty: ENCOUNTER_DIFFICULTY.EASY,
+        }}
+      />
+    );
+
+    const difficultyExplanation = screen.getByText(/easy/i);
+
+    expect(difficultyExplanation).toBeInTheDocument();
   });
 });
