@@ -36,7 +36,7 @@ export const MonstersList = ({ onMonsterAdd }: Props) => {
           const amount =
             monstersInEncounter.find((m) => m.id === monster.id)?.amount ?? 0;
           return (
-            <li key={monster.id}>
+            <li key={monster.id} data-testid="monster-item">
               <MonsterCard
                 monster={monster}
                 amount={amount}

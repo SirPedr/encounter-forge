@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { MonstersList } from "@/modules/encounter/components/MonstersList/MonstersList";
+import { MonstersList } from "@/modules/encounter/components/MonstersList";
 import { useEncounterForgeStore } from "@/providers/zustand";
 import { useState } from "react";
 import { EncounterDetails } from "../../components/EncounterDetails";

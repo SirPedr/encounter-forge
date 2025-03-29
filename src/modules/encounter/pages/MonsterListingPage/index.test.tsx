@@ -43,7 +43,7 @@ describe("MonsterListingPage", () => {
     renderEncounterBuildPage({ preloadedMonsters: [fakeMonster] });
 
     const monsterList = screen.getByRole("list", { name: /monster list/i });
-    const renderedItems = within(monsterList).getAllByRole("listitem");
+    const renderedItems = within(monsterList).getAllByTestId("monster-item");
 
     expect(monsterList).toBeInTheDocument();
     expect(renderedItems).toHaveLength(1);

@@ -10,25 +10,38 @@ describe("MonsterCard", () => {
       amount: 1,
       xpGeneral: 10000,
       xpInLair: 30000,
+      environments: ["coastal", "swamp"],
     });
 
-    render(<MonsterCard monster={fakeMonster} amount={0} />);
+    render(
+      <MonsterCard monster={fakeMonster} amount={0} onAmountChange={vi.fn()} />
+    );
 
     expect(screen.getByText(fakeMonster.name)).toBeInTheDocument();
     expect(screen.getByText("CR 1")).toBeInTheDocument();
 
-    expect(screen.getByText("Type: elemental")).toBeInTheDocument();
-    expect(
-      screen.getByText("Environments: mountain, planar, air")
-    ).toBeInTheDocument();
-    expect(screen.getByText("XP: 10000 | In Lair: 30000")).toBeInTheDocument();
+    expect(screen.getByText("Elemental")).toBeInTheDocument();
 
-    expect(screen.getByRole("button", { name: "Add" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("listitem", { name: /coastal/i })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("listitem", { name: /swamp/i })
+    ).toBeInTheDocument();
+
+    expect(screen.getByText("10000")).toBeInTheDocument();
+    expect(screen.getByText("30000")).toBeInTheDocument();
+    expect(screen.getByText("XP")).toBeInTheDocument();
+    expect(screen.getByText("XP In Lair")).toBeInTheDocument();
+
+    expect(screen.getByRole("button", { name: /add/i })).toBeInTheDocument();
   });
 
   it("should show amount controls when amount is bigger than 0", async () => {
     const fakeMonster = createMonsterFixture({ amount: 1 });
-    render(<MonsterCard monster={fakeMonster} amount={1} />);
+    render(
+      <MonsterCard monster={fakeMonster} amount={1} onAmountChange={vi.fn()} />
+    );
 
     expect(
       screen.getByRole("button", {
@@ -58,7 +71,7 @@ describe("MonsterCard", () => {
         />
       );
 
-      const addButton = screen.getByRole("button", { name: "Add" });
+      const addButton = screen.getByRole("button", { name: /add/i });
 
       await userEvent.click(addButton);
 

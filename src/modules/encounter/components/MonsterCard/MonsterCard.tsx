@@ -1,76 +1,38 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Monster } from "@prisma/client";
 import React from "react";
 import { EncounterMonster } from "../../types";
+import { MonsterAmountControls } from "../MonsterAmountControls";
+import { MonsterHeader } from "../MonsterHeader";
+import { MonsterStats } from "../MonsterStats";
 
 type Props = {
   monster: Monster;
   amount: number;
-  onAmountChange?: (monster: EncounterMonster) => void;
+  onAmountChange: (monster: EncounterMonster) => void;
 };
 
-export const MonsterCard = ({ monster, amount, onAmountChange }: Props) => {
-  const onIncreaseAmount = () => {
-    onAmountChange?.({ ...monster, amount: amount + 1 });
-  };
+export const MonsterCard = ({ monster, amount, onAmountChange }: Props) => (
+  <Card className="h-full pt-0 relative">
+    <img
+      src="https://platform.polygon.com/wp-content/uploads/sites/2/2024/09/phb-2024-cover.jpeg?quality=90&strip=all&crop=0,24.5552761479,100,50.8894477042"
+      className="h-24 w-full object-cover"
+    />
+    <CardHeader className="flex flex-row items-center justify-between">
+      <section className="absolute top-[78px] left-1/2 -translate-x-1/2">
+        <MonsterAmountControls
+          monster={monster}
+          amount={amount}
+          onAmountChange={onAmountChange}
+        />
+      </section>
+      <MonsterHeader monster={monster} />
+    </CardHeader>
 
-  const onDecreaseAmount = () => {
-    onAmountChange?.({ ...monster, amount: amount - 1 });
-  };
-
-  return (
-    <Card className="h-full">
-      <CardHeader className="flex flex-row">
-        <CardTitle>{monster.name}</CardTitle>
-        <CardDescription>CR {monster.challenge_rating}</CardDescription>
-      </CardHeader>
-
-      <CardContent>
-        <CardDescription>Type: {monster.type.join(", ")}</CardDescription>
-        <CardDescription>
-          Environments: {monster.environments.join(", ")}
-        </CardDescription>
-        <CardDescription>
-          XP: {monster.xpGeneral}{" "}
-          {monster.xpInLair && (
-            <React.Fragment>| In Lair: {monster.xpInLair}</React.Fragment>
-          )}
-        </CardDescription>
-      </CardContent>
-
-      <CardFooter className="justify-center mt-auto">
-        {amount === 0 ? (
-          <Button onClick={onIncreaseAmount} className="w-full">
-            Add
-          </Button>
-        ) : (
-          <div className="flex items-center gap-5">
-            <Button
-              onClick={onDecreaseAmount}
-              aria-label={`Remove 1 ${monster.name} from encounter`}
-            >
-              -
-            </Button>
-            {amount}
-            <Button
-              onClick={onIncreaseAmount}
-              aria-label={`Add 1 ${monster.name} from encounter`}
-            >
-              +
-            </Button>
-          </div>
-        )}
-      </CardFooter>
-    </Card>
-  );
-};
+    <CardContent className="flex flex-wrap gap-2 items-center justify-between">
+      <MonsterStats monster={monster} />
+    </CardContent>
+  </Card>
+);
