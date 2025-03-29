@@ -1,5 +1,6 @@
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import { capitalize } from "@/lib/capitalize";
+import { formatCR } from "@/lib/formatCR";
 import { Monster } from "@prisma/client";
 import { Fragment } from "react";
 
@@ -15,7 +16,7 @@ export const MonsterHeader = ({ monster }: Props) => {
         <CardDescription>{capitalize(monster.type.join(", "))}</CardDescription>
       </div>
       <CardDescription className="text-xl font-bentham text-white">
-        CR {monster.challenge_rating}
+        CR {formatCR(monster.challenge_rating)}
       </CardDescription>
     </Fragment>
   );
