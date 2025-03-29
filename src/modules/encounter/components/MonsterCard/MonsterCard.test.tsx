@@ -29,8 +29,8 @@ describe("MonsterCard", () => {
       screen.getByRole("listitem", { name: /swamp/i })
     ).toBeInTheDocument();
 
-    expect(screen.getByText("10000")).toBeInTheDocument();
-    expect(screen.getByText("30000")).toBeInTheDocument();
+    expect(screen.getByText("10,000")).toBeInTheDocument();
+    expect(screen.getByText("30,000")).toBeInTheDocument();
     expect(screen.getByText("XP")).toBeInTheDocument();
     expect(screen.getByText("XP In Lair")).toBeInTheDocument();
 

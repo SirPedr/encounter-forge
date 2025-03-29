@@ -7,17 +7,19 @@ type Props = {
   monster: Monster;
 };
 
+const XP_FORMATTER = new Intl.NumberFormat("en-US");
+
 export const MonsterStats = ({ monster }: Props) => (
   <Fragment>
     <div>
       <dt className="font-bold">XP</dt>
-      <dd>{monster.xpGeneral}</dd>
+      <dd>{XP_FORMATTER.format(monster.xpGeneral)}</dd>
     </div>
 
     {monster.xpInLair && (
       <div>
         <dt className="font-bold">XP In Lair</dt>
-        <dd>{monster.xpInLair}</dd>
+        <dd>{XP_FORMATTER.format(monster.xpInLair)}</dd>
       </div>
     )}
 
