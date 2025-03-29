@@ -29,7 +29,7 @@ export const MonstersList = ({ onMonsterAdd }: Props) => {
   return (
     <section>
       <ol
-        className="grid grid-cols-1 md:grid-cols-3 gap-4"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4"
         aria-label="monster list"
       >
         {monsters?.map((monster) => {
